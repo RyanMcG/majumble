@@ -63,10 +63,14 @@
                                          [:O "+"]]]))))
 
 (describe "parsing source to internal representation"
+  (it "adds"
+    (should-be-matrices= '([[5 5]
+                            [5 5]])
+                         (parse "[[1 2] [3 4]]
+                                 [[4 3] [2 1]] +")))
   (it "transposes"
-    (should= '([[1 2]
-                [3 4]])
-             (parse "[[1 2]
-                      [3 4]]'"))))
+    (should-be-matrices= '([[1 3]
+                            [2 4]])
+                         (parse "[[1 2] [3 4]] '"))))
 
 (run-specs)
