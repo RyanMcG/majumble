@@ -1,5 +1,6 @@
 (ns majumble.core-spec
-  (:require [speclj.core :refer :all]
+  (:require [clojure.core.matrix :as ma]
+            [speclj.core :refer :all]
             [majumble.core :refer :all]))
 
 (describe "creating parse-trees"
@@ -34,6 +35,11 @@
                 [:M [:M [:NS "5" "6"]] [:M [:NS "7" "8"]]]]
                [:O "+"]]]
              (source->tree "[[1 2] [3 4]] [[5 6] [7 8]] +"))))
+
+(defmacro should-be-matrices=
+  [expected-form actual-form]
+  `(should= (map ma/matrix ~expected-form)
+            ~actual-form))
 
 (describe "converting parse-trees to an internal representation"
   (it "handles numbers"
