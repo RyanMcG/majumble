@@ -21,7 +21,7 @@
 (def lookup-operator
   "A mapping of strings to the internal operations they represent."
   {"+" ma/add
-   "*" ma/dot
+   "*" ma/mul
    "x" ma/cross
    "." ma/det
    "/" ma/div
@@ -33,13 +33,13 @@
   [args operator]
   (apply operator args))
 
-(defn M->vector
+(defn M->matrix
   "Take arguments to an M expression and coerce it to a vector."
   [& matricies]
-  (let [first-matrix (first matricies)]
-    (vec (if (seq? first-matrix)
-           first-matrix
-           matricies))))
+  (ma/matrix (let [first-matrix (first matricies)]
+               (vec (if (seq? first-matrix)
+                      first-matrix
+                      matricies)))))
 
 (defn list-if-not-seq
   [& results]
@@ -53,7 +53,7 @@
    :O lookup-operator
    :OE operate
    :AS list-if-not-seq
-   :M M->vector})
+   :M M->matrix})
 
 (def transform (partial insta/transform transformations-spec))
 
