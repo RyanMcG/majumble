@@ -46,18 +46,21 @@
     (should= '(10 9 8)
              (transform [:S [:NS "10" "9" "8"]])))
   (it "handles matrices"
-    (should= '([10 9 8] [1 2])
-             (transform [:S [:M [:NS "10" "9" "8"]] [:M [:NS "1" "2"]]]))
-    (should= '([[1 2] [3 4]])
-             (transform [:S [:M
-                             [:M [:NS "1" "2"]]
-                             [:M [:NS "3" "4"]]]])))
+    (should-be-matrices= '([10 9 8] [1 2])
+                         (transform [:S
+                                     [:M [:NS "10" "9" "8"]]
+                                     [:M [:NS "1" "2"]]]))
+    (should-be-matrices= '([[1 2] [3 4]])
+                         (transform [:S [:M
+                                         [:M [:NS "1" "2"]]
+                                         [:M [:NS "3" "4"]]]])))
   (it "handles operators"
-    (should= '(3) (transform [:S [:OE [:AS [:NS "1" "2"]] [:O "+"]]]))
-    (should= '([3])
-             (transform [:S [:OE
-                             [:AS [:M [:NS "1"]] [:M [:NS "2"]]]
-                             [:O "+"]]]))))
+    (should= '(3)
+             (transform [:S [:OE [:AS [:NS "1" "2"]] [:O "+"]]]))
+    (should-be-matrices= '([3])
+                         (transform [:S [:OE
+                                         [:AS [:M [:NS "1"]] [:M [:NS "2"]]]
+                                         [:O "+"]]]))))
 
 (describe "parsing source to internal representation"
   (it "transposes"
