@@ -17,3 +17,46 @@
                  OE = AS O
                  O = '+' | '*' | '/' | '-' | \"'\" | 'x' | '.'
                  W = #'\\s+'"))
+
+(def lookup-operator
+  "A mapping of strings to the internal operations they represent."
+  {"+" ma/add
+   "*" ma/dot
+   "x" ma/cross
+   "." ma/det
+   "/" ma/div
+   "-" ma/sub
+   "'" ma/transpose})
+
+(defn operate
+  "Applies the operator to the given arguments."
+  [args operator]
+  (apply operator args))
+
+(defn M->vector
+  "Take arguments to an M expression and coerce it to a vector."
+  [& matricies]
+  (let [first-matrix (first matricies)]
+    (vec (if (seq? first-matrix)
+           first-matrix
+           matricies))))
+
+(defn list-if-not-seq
+  [& results]
+  (let [first-result (first results)]
+    (if (seq? first-result) first-result results)))
+
+(def ^:const ^:private transformations-spec
+  "A mapping of terminals to transformation functions."
+  {:NS (comp (partial map read-string) list)
+   :S list-if-not-seq
+   :O lookup-operator
+   :OE operate
+   :AS list-if-not-seq
+   :M M->vector})
+
+(def transform (partial insta/transform transformations-spec))
+
+(def parse
+  "Parse and transform the given majumble code."
+  (comp transform source->tree))
