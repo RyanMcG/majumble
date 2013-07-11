@@ -1,8 +1,7 @@
 (ns majumble.core
   "A postfix, quick and dirty martix manipulation language."
   (:require [instaparse.core :as insta]
-            [clojure.core.matrix :as ma]
-            [clojure.core.matrix.operators :as mo]))
+            [clojure.core.matrix :as ma]))
 
 (ma/set-current-implementation :vectorz)
 
