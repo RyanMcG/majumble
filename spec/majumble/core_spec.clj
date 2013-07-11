@@ -53,6 +53,11 @@
                              [:AS [:M [:NS "1"]] [:M [:NS "2"]]]
                              [:O "+"]]]))))
 
-(describe "parsing source to internal representation")
+(describe "parsing source to internal representation"
+  (it "transposes"
+    (should= '([[1 2]
+                [3 4]])
+             (parse "[[1 2]
+                      [3 4]]'"))))
 
 (run-specs)
