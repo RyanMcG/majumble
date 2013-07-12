@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [net.mikera/vectorz-clj "0.10.0"]
                  [instaparse "1.2.0"]]
-  :profiles {:dev {:dependencies [[speclj "2.5.0"]]}}
-  :plugins [[speclj "2.5.0"]]
+  :profiles {:dev {:dependencies [[speclj "2.7.4"]]}}
+  :plugins [[speclj "2.7.4"]]
   :test-paths ["spec"]
   :main majumble.core)
