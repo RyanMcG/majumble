@@ -64,6 +64,16 @@
                         [5 5]])
                      (parse "[[1 2] [3 4]]
                              [[4 3] [2 1]] +")))
+  (it "multiplication"
+    (should-matrix== '(20)
+                     (parse "[1 2 3 4]
+                             [4 3 2 1] *"))
+    (should-matrix== '([[7 10]
+                        [15 22]])
+                     (parse "[[1 2]
+                              [3 4]]
+                             [[1 2]
+                              [3 4]] *")))
   (it "transposes"
     (should-matrix== '([[1 3]
                         [2 4]])
