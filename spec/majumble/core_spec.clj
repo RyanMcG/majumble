@@ -1,6 +1,7 @@
 (ns majumble.core-spec
   (:require [clojure.core.matrix :as ma]
             [speclj.core :refer :all]
+            [speclj.shoulds.matrix :refer [should-matrix==]]
             [majumble.core :refer :all]))
 
 (describe "creating parse-trees"
@@ -36,41 +37,36 @@
                [:O "+"]]]
              (source->tree "[[1 2] [3 4]] [[5 6] [7 8]] +"))))
 
-(defmacro should-be-matrices=
-  [expected-form actual-form]
-  `(should= (map ma/matrix ~expected-form)
-            ~actual-form))
-
 (describe "converting parse-trees to an internal representation"
   (it "handles numbers"
     (should= '(10 9 8)
              (transform [:S [:NS "10" "9" "8"]])))
   (it "handles matrices"
-    (should-be-matrices= '([10 9 8] [1 2])
-                         (transform [:S
-                                     [:M [:NS "10" "9" "8"]]
-                                     [:M [:NS "1" "2"]]]))
-    (should-be-matrices= '([[1 2] [3 4]])
-                         (transform [:S [:M
-                                         [:M [:NS "1" "2"]]
-                                         [:M [:NS "3" "4"]]]])))
+    (should-matrix== '([10 9 8] [1 2])
+                     (transform [:S
+                                 [:M [:NS "10" "9" "8"]]
+                                 [:M [:NS "1" "2"]]]))
+    (should-matrix== '([[1 2] [3 4]])
+                     (transform [:S [:M
+                                     [:M [:NS "1" "2"]]
+                                     [:M [:NS "3" "4"]]]])))
   (it "handles operators"
     (should= '(3)
              (transform [:S [:OE [:AS [:NS "1" "2"]] [:O "+"]]]))
-    (should-be-matrices= '([3])
-                         (transform [:S [:OE
-                                         [:AS [:M [:NS "1"]] [:M [:NS "2"]]]
-                                         [:O "+"]]]))))
+    (should-matrix== '([3])
+                     (transform [:S [:OE
+                                     [:AS [:M [:NS "1"]] [:M [:NS "2"]]]
+                                     [:O "+"]]]))))
 
 (describe "parsing source to internal representation"
   (it "adds"
-    (should-be-matrices= '([[5 5]
-                            [5 5]])
-                         (parse "[[1 2] [3 4]]
-                                 [[4 3] [2 1]] +")))
+    (should-matrix== '([[5 5]
+                        [5 5]])
+                     (parse "[[1 2] [3 4]]
+                             [[4 3] [2 1]] +")))
   (it "transposes"
-    (should-be-matrices= '([[1 3]
-                            [2 4]])
-                         (parse "[[1 2] [3 4]] '"))))
+    (should-matrix== '([[1 3]
+                        [2 4]])
+                     (parse "[[1 2] [3 4]]'"))))
 
 (run-specs)
