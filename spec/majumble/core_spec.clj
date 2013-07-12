@@ -1,7 +1,7 @@
 (ns majumble.core-spec
   (:require [clojure.core.matrix :as ma]
             [speclj.core :refer :all]
-            [speclj.shoulds.matrix :refer [should-matrix==]]
+            [speclj.shoulds.matrix.core :refer [should-matrix==]]
             [majumble.core :refer :all]))
 
 (describe "creating parse-trees"
