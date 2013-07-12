@@ -1,5 +1,5 @@
 (ns majumble.core
-  "A postfix, quick and dirty martix manipulation language."
+  "A quick and dirty matrix manipulation postfix language."
   (:require [instaparse.core :as insta]
             [clojure.core.matrix :as ma]))
 
