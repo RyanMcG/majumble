@@ -1,6 +1,5 @@
 (ns majumble.core-spec
-  (:require [clojure.core.matrix :as ma]
-            [speclj.core :refer :all]
+  (:require [speclj.core :refer :all]
             [speclj.shoulds.matrix.core :refer [should-matrix==]]
             [majumble.core :refer :all]))
 
