@@ -22,6 +22,11 @@ less typing than if you used [clojure.core.matrix][] functions directly.
 (parse "[[1 2] [3 4]]' [[1 2] [2 1]] *")
 ```
 
+Just for fun, you can also put clojure in majumble code.
+
+```clojure
+(parse "[[1 2] [(inc 2) 4]]' [[1 2] [2 1]] *")
+```
 
 #### Inspiration
 
