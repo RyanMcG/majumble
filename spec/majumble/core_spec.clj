@@ -58,24 +58,50 @@
                                      [:O "+"]]]))))
 
 (describe "parsing source to internal representation"
-  (it "adds"
-    (should-matrix== '([[5 5]
-                        [5 5]])
-                     (parse "[[1 2] [3 4]]
-                             [[4 3] [2 1]] +")))
-  (it "multiplication"
-    (should-matrix== '(20)
-                     (parse "[1 2 3 4]
-                             [4 3 2 1] *"))
-    (should-matrix== '([[7 10]
-                        [15 22]])
-                     (parse "[[1 2]
-                              [3 4]]
-                             [[1 2]
-                              [3 4]] *")))
-  (it "transposes"
-    (should-matrix== '([[1 3]
-                        [2 4]])
-                     (parse "[[1 2] [3 4]]'"))))
+  (context "whitespace"
+    (it "doesn't matter much"
+      (should-matrix== '([1])
+                       (parse " [   1 ]  ")))
+    (it "ignores commas"
+      (should-matrix== '([1])
+                       (parse " [,,,1 ]  "))))
+  (context "clojure expressions"
+    (it "evals clojure expressions"
+      (should-matrix== '(1)
+                       (parse "(inc 0)"))))
+  (context "operations"
+    (it "adds"
+      (should-matrix== '([[5 5]
+                          [5 5]])
+                       (parse "[[1 2] [3 4]]
+                               [[4 3] [2 1]] +")))
+    (it "multiplication"
+      (should-matrix== '(20)
+                       (parse "[1 2 3 4]
+                               [4 3 2 1] *"))
+      (should-matrix== '([[7 10]
+                          [15 22]])
+                       (parse "[[1 2]
+                               [3 4]]
+                               [[1 2]
+                               [3 4]] *")))
+    (it "transposes"
+      (should-matrix== '([[1 3]
+                          [2 4]])
+                       (parse "[[1 2] [3 4]]'")))
+    (context "arity"
+      (it "works with many values"
+        (should-matrix== '([[7 19]
+                            [13 25]])
+                         (parse "[[1 2] [3 4]]' 3 2 * [[1 1] [1 1]] +"))))
+    (context "nesting"
+      (it "works with values between operators"
+        (should-matrix== '([[2 4]
+                            [3 5]])
+                         (parse "[[1 2] [3 4]]' [[1 1] [1 1]] +")))
+      (it "works without values between operators"
+        (should-matrix== '([[2 4]
+                            [3 5]])
+                         (parse "[[1 2] [3 4]] [[1 1] [1 1]] + '"))))))
 
 (run-specs)
