@@ -1,6 +1,7 @@
 (ns majumble.core
   "A quick and dirty matrix manipulation postfix language."
   (:require [instaparse.core :as insta]
+            [clojure.edn :as edn]
             [clojure.core.matrix :as ma]))
 
 (ma/set-current-implementation :vectorz)
@@ -8,15 +9,15 @@
 (def source->tree
   "A function to parse majumble code."
   (insta/parser "S = VS | OE
-                 <VS> = (V <W>?)* V
-                 <V> = M | NS
-                 M = <'['> (NS | (M <W>?)+) <']'>
-                 NS = (N <W>)* N <W?>
-                 <N> = #'[0-9]+'
-                 AS = (OE <W>)? VS <W>?
-                 OE = AS O
-                 O = '+' | '*' | '/' | '-' | \"'\" | 'x' | '.'
-                 W = #'\\s+'"))
+                 <VS> = <W>? (V <W>?)+ (* values *)
+                 <V> = M | N | CE (* value *)
+                 M = <'['> VS <']'> (* matrix *)
+                 N = #'(\\.[0-9]+|[0-9]+\\.?[0-9]*)'
+                 CE = '(' #'.'+ ')'  (* clojure expression *)
+                 OE =  AS O (* operator expression *)
+                 AS =  OE <W>? VS? | VS (* arguments *)
+                 O = '+' | '*' | '/' | '-' | \"'\" | 'x' | '.' (* operator *)
+                 W = #'[,\\s]+' (* whitespace *)"))
 
 (def lookup-operator
   "A mapping of strings to the internal operations they represent."
@@ -48,7 +49,8 @@
 
 (def ^:const ^:private transformations-spec
   "A mapping of terminals to transformation functions."
-  {:NS (comp (partial map read-string) list)
+  {:N edn/read-string
+   :CE (comp eval read-string (partial apply str))
    :S list-if-not-seq
    :O lookup-operator
    :OE operate
