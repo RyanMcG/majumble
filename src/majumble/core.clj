@@ -22,7 +22,7 @@
 (def lookup-operator
   "A mapping of strings to the internal operations they represent."
   {"+" ma/add
-   "*" ma/mul
+   "*" ma/inner-product
    "x" ma/cross
    "." ma/det
    "/" ma/div
